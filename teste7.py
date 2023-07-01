@@ -21,58 +21,46 @@ H+TCFtI5WJqFEEGVIO1BRC9lz7uodf/GxmzkcUMUmSU1fsUCQQDvQfVBPJsBFcrx
 boXY0b6gwJGYNjV7zFE7mWJe356qDSyRBrftwpk6ZjM50OIbL7wFBkru1b34Zo/n
 1txHkMLXAkEAx2Vugcr3lrg5ebS7Zy5P6xOjgdjIGbZPM3ybfJdUv6pcpEzUaXXt
 YHYGycKbvvfw7XHrJagORh3mNQRWrEiRNQJAJyShXVTu/xRzqWAtobVe/KnEqCRm
-R6S7vYZwo5juOmABZJC20r09mGJUCydzdoMuvZuz8rMha1xMOt/aFhNG7QJAH2nu
-iApHCXrKq076+12Df8CfUPSrScm8HptyD6Xz1yJq6AOmr1rB5CGUHjNHwEVlsrLw
-3gTlAszxGMcvNINWRQJAdGmgXJDKHziJIkWt5dTcqj7Gnm7y1r0KNxJ66ivENsyl
-qBhJ3TMW4W2Eyq8AWJLoxTZtx+PrR5RQGr+keVh5qg==
------END RSA PRIVATE KEY-----"""
+R6S7vYZwo5juOmABZJC20r09mGJUCydzdoMuvZuz8rMha1xMOt/aFhNG7QJAH"""
 
-# Endereço IP e portas
-ip = "3.204.246.63"
-portas = [2000, 23456, 34567]
-
-# Dados do payload
-dados_payload = {
+# Dados para envio
+data = {
     "group": "NONAME",
     "seq_number": 1,
-    "seq_max": 4
+    "seq_max": 4,
+    "matricula": 20150466
 }
 
-# Números de matrícula
-matriculas = [20150466, 20150467, 20150468, 20150469]
+# Convertendo os dados para JSON
+payload = json.dumps(data)
 
-# Criação do token JWT
-def criar_token(payload):
-    return jwt.encode(payload, private_key, algorithm="RS256").decode("utf-8")
+# Assinando o JWT
+encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
 
-# Conversão de dados para bytes
-def converter_para_bytes(data):
-    if isinstance(data, str):
-        return data.encode("utf-8")
-    elif isinstance(data, dict):
-        return json.dumps(data).encode("utf-8")
-    else:
-        return data
+# Criando o socket e enviando os dados
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("localhost", 2000))
+    sock.sendall(encoded_jwt)
+    sock.close()
+    print("Dados enviados para a porta 2000 com sucesso!")
+except Exception as e:
+    print("Erro ao enviar para a porta 2000:", str(e))
 
-# Enviar dados para o servidor remoto
-def enviar_dados(ip, porta, dados):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.sendto(converter_para_bytes(dados), (ip, porta))
-    print(f"Dados enviados para a porta {porta}")
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("localhost", 23456))
+    sock.sendall(encoded_jwt)
+    sock.close()
+    print("Dados enviados para a porta 23456 com sucesso!")
+except Exception as e:
+    print("Erro ao enviar para a porta 23456:", str(e))
 
-# Envio dos dados para cada porta
-for porta in portas:
-    # Atualiza o número de matrícula no payload
-    dados_payload["matricula"] = matriculas[portas.index(porta)]
-    
-    # Cria o token JWT com o payload atualizado
-    token = criar_token(dados_payload)
-
-    # Monta os dados para enviar ao servidor
-    dados_enviar = {
-        "token": token,
-        "payload": dados_payload
-    }
-
-    # Envia os dados para o servidor
-    enviar_dados(ip, porta, dados_enviar)
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("localhost", 34567))
+    sock.sendall(encoded_jwt)
+    sock.close()
+    print("Dados enviados para a porta 34567 com sucesso!")
+except Exception as e:
+    print("Erro ao enviar para a porta 34567:", str(e))
