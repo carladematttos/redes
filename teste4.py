@@ -32,7 +32,6 @@ JZ3pg6aEshn5EmA6fBY7r5F8t5XNy3XX7gnAAzXoWQ==
 -----END RSA PRIVATE KEY-----
 '''
 
-
 # Dados do servidor
 server_ip = "43.204.246.63"
 server_ports = [2000, 23456, 34567]
@@ -57,18 +56,7 @@ def verify_response_jwt(response_jwt):
         return False, None
 
 # Função principal
-def main():
-    parser = argparse.ArgumentParser(description="UDP Client")
-    parser.add_argument("group_name", type=str, help="Name of the group")
-    parser.add_argument("seq_max", type=int, help="Number of components in the group")
-    parser.add_argument("report_file", type=str, help="Path to the report file")
-
-    args = parser.parse_args()
-
-    group_name = "Noname"  # Definir o nome do grupo como "Noname"
-    seq_max = 4  # Definir o valor máximo da sequência como 4
-    report_file = args.report_file
-
+def main(group_name, seq_max, report_file):
     seq_number = 1
     while seq_number <= seq_max:
         # Criar o payload para a requisição
@@ -109,4 +97,14 @@ def main():
                 seq_number += 1
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="UDP Client")
+    parser.add_argument("group_name", type=str, help="Name of the group")
+    parser.add_argument("seq_max", type=int, help="Number of components in the group")
+    parser.add_argument("report_file", type=str, help="Path to the report file")
+    args = parser.parse_args()
+
+    group_name = args.group_name.upper()
+    seq_max = args.seq_max
+    report_file = args.report_file
+
+    main(group_name, seq_max, report_file)
