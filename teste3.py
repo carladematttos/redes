@@ -24,8 +24,8 @@ boXY0b6gwJGYNjV7zFE7mWJe356qDSyRBrftwpk6ZjM50OIbL7wFBkru1b34Zo/n
 YHYGycKbvvfw7XHrJagORh3mNQRWrEiRNQJAJyShXVTu/xRzqWAtobVe/KnEqCRm
 R6S7vYZwo5juOmABZJC20r09mGJUCydzdoMuvZuz8rMha1xMOt/aFhNG7QJAH2nu
 iApHCXrKq076+12Df8CfUPSrScm8HptyD6Xz1yJq6AOmr1rB5CGUHjNHwEVls
-rLw3gTlAszxGMcvNINWRQJAdGmgXJDKHziJIkWt5dTcqj7Gnm7y1r0KNxJ66ivEN
-sylqBhJ3TMW4W2Eyq8AWJLoxTZtx+PrR5RQGr+keVh5qg==
+rQDGnLzIQ/BO0SvrrQJBAJ1xXdj6vwmFOWuZtflW9HKY8rT1gO2kM2nRX+1/Ny8C
+hlHjAfGLlxzrZlqpwDeuMSOZpqOb9OszapXFcQFwhRc=
 -----END RSA PRIVATE KEY-----
 """
 
@@ -57,7 +57,7 @@ for matricula in matriculas:
     try:
         # Envio da mensagem para cada porta do servidor
         for server_port in server_ports:
-            client_socket.sendto(token, (server_address, server_port))
+            client_socket.sendto(token.encode(), (server_address, server_port))
             print(f"Mensagem enviada para matrícula {matricula} na porta {server_port}")
 
             # Recebimento da resposta do servidor
