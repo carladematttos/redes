@@ -45,7 +45,7 @@ def send_udp_request(ip, port, token):
 # Função para criar o token JWT com base nos dados do payload
 def create_jwt(payload):
     encoded = jwt.encode(payload, private_key, algorithm='RS256')
-    return encoded.decode()
+    return encoded
 
 # Função para verificar a resposta JWT recebida do servidor
 def verify_response_jwt(response_jwt):
