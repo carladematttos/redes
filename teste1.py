@@ -89,7 +89,7 @@ def main():
 
     for port in ports:
         for seq_number, matricula in zip(seq_numbers, matriculas):
-            payload = create_payload(seq_number, matricula)
+            payload = create_payload(matricula, seq_number)
             token = create_token(payload)
 
             message = token  # Use the token directly without decoding
