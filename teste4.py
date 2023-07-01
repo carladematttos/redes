@@ -64,8 +64,8 @@ def main():
 
     args = parser.parse_args()
 
-    group_name = args.group_name.upper()
-    seq_max = args.seq_max
+    group_name = "Noname"  # Definir o nome do grupo como "Noname"
+    seq_max = 4  # Definir o valor máximo da sequência como 4
     report_file = args.report_file
 
     seq_number = 1
