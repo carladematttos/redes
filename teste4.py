@@ -32,6 +32,7 @@ JZ3pg6aEshn5EmA6fBY7r5F8t5XNy3XX7gnAAzXoWQ==
 -----END RSA PRIVATE KEY-----
 '''
 
+
 # Dados do servidor
 server_ip = "43.204.246.63"
 server_ports = [2000, 23456, 34567]
