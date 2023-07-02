@@ -51,7 +51,7 @@ def generate_jws_token(payload, private_key):
         "typ": "JWT"
     }
     token = jwt.encode(payload, private_key, algorithm="RS256", headers=headers)  # Gera o token JWT com a chave privada
-    return token.decode()
+    return token
 
 
 def verify_jws_token(token, public_key):
@@ -105,24 +105,24 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
 
 
 def scan_udp(ip, ports, private_key, public_key, response_file):
-    for port in ports:
-        for seq_number in range(1, 5):
-            payload = {
-                "group": "NONAME",
-                "seq_number": seq_number,
-                "seq_max": 4,
-                "matricula": f"2015046{seq_number}"
-            }
+    for seq_number in range(1, 5):
+        payload = {
+            "group": "NONAME",
+            "seq_number": seq_number,
+            "seq_max": 4,
+            "matricula": f"2015046{seq_number}"
+        }
+        for port in ports:
             send_request(ip, port, payload, private_key, public_key, response_file)
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Envio de Dados via UDP com JWT')  # Cria um objeto de análise de argumentos
-    parser.add_argument('ip', type=str, help='IP do servidor')
+    parser = argparse.ArgumentParser(description='Cliente UDP')
+    parser.add_argument('ip', type=str, help='Endereço IP do servidor')
     parser.add_argument('ports', type=int, nargs='+', help='Portas do servidor')
-    parser.add_argument('response_file', type=str, help='Caminho para o arquivo de resposta')
+    parser.add_argument('response_file', type=str, help='Arquivo para salvar as respostas')
 
-    args = parser.parse_args()  # Analisa os argumentos da linha de comando
+    args = parser.parse_args()
 
     ip = args.ip
     ports = args.ports
