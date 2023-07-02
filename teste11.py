@@ -40,9 +40,9 @@ vSPgeOdLavydF+atLptGHNY9wsfTozhDwwgn+dw9vEgfJ9uySvcKWt/TrgX7xXSv
 
 
 def send_udp_message(ip, port, message):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Cria um objeto de soquete UDP
-    sock.sendto(message.encode(), (ip, port))  # Envia a mensagem para o endereço IP e porta especificados
-    sock.close()  # Fecha o soquete
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(message.encode(), (ip, port))
+    sock.close()
 
 
 def generate_jws_token(payload, private_key):
@@ -50,12 +50,12 @@ def generate_jws_token(payload, private_key):
         "alg": "RS256",
         "typ": "JWT"
     }
-    token = jwt.encode(payload, private_key, algorithm="RS256", headers=headers)  # Gera o token JWT com a chave privada
+    token = jwt.encode(payload, private_key, algorithm="RS256", headers=headers)
     return token
 
 
 def verify_jws_token(token, public_key):
-    decoded_token = jwt.decode(token, public_key, algorithms=["RS256"])  # Decodifica e verifica o token usando a chave pública
+    decoded_token = jwt.decode(token, public_key, algorithms=["RS256"])
     return decoded_token
 
 
@@ -78,12 +78,12 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
         sock.bind(('', port))
         sock.settimeout(5)
 
-        data, addr = sock.recvfrom(1024)  # Tenta receber dados de volta do servidor UDP
-        response_token = data.decode('utf-8')  # Decodifica o token recebido
+        data, addr = sock.recvfrom(1024)
+        response_token = data.decode('utf-8')
 
         is_valid = False
         try:
-            decoded_token = verify_jws_token(response_token, public_key)  # Verifica a assinatura usando a chave pública
+            decoded_token = verify_jws_token(response_token, public_key)
             is_valid = True
         except jwt.exceptions.InvalidTokenError:
             pass
@@ -92,7 +92,7 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
 
         if is_valid:
             response_payload = {
-                "id_request": hashlib.sha256(token.encode()).hexdigest(),
+                "id_request": hashlib.sha256(token).hexdigest(),
                 "next_number": payload["seq_number"] + 1,
                 "otp_number": 3205,
                 "otp_timestamp": get_current_timestamp()
