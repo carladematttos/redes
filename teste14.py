@@ -75,8 +75,9 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
 
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind(('0.0.0.0', 0))
         sock.settimeout(5)
-        sock.bind(('0.0.0.0', 0))  # Bind to a random local port
+        sock.listen(1)
 
         data, addr = sock.recvfrom(1024)
         response_token = data.decode('utf-8')
@@ -92,15 +93,13 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
 
         if is_valid:
             response_payload = {
-                "id_request": hashlib.sha256(token.encode()).hexdigest(),
+                "id_request": hashlib.sha256(token).hexdigest(),
                 "next_number": payload["seq_number"] + 1,
                 "otp_number": 3205,
                 "otp_timestamp": get_current_timestamp()
             }
             response_token = generate_jws_token(response_payload, private_key)
             send_udp_message(ip, port, response_token)
-
-        sock.close()
 
     except socket.timeout:
         print("Timeout ao aguardar resposta do servidor")
