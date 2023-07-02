@@ -92,7 +92,7 @@ def main():
     parser = argparse.ArgumentParser(description='Envio de requisições UDP com JWT')
     parser.add_argument('protocolo', choices=['tcp', 'udp'], help='Protocolo de envio (TCP ou UDP)')
     parser.add_argument('ip', help='Endereço IP do servidor')
-    parser.add_argument('portas', nargs=3, type=int, help='Lista de três portas')
+    parser.add_argument('portas', nargs='+', type=int, help='Portas do servidor')
     parser.add_argument('--saida', default='respostas.txt', help='Arquivo de saída para salvar as respostas')
     args = parser.parse_args()
 
