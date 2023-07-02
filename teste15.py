@@ -75,8 +75,9 @@ def send_request(ip, port, payload, private_key, public_key, response_file):
 
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind(('0.0.0.0', 0))
         sock.settimeout(5)
-
+        
         data, addr = sock.recvfrom(1024)
         response_token = data.decode('utf-8')
 
