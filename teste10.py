@@ -9,6 +9,7 @@ import datetime
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 PRIVATE_KEY = """
 -----BEGIN RSA PRIVATE KEY-----
@@ -116,51 +117,17 @@ def scan_udp(ip, port, private_key, public_key, response_file):
 
 def main():
     parser = argparse.ArgumentParser(description='Envio de Dados via UDP com JWT')  # Cria um objeto de análise de argumentos
-    parser.add_argument('ip', type=str, help='Endereço IP do servidor')
+    parser.add_argument('ip', type=str, help='IP do servidor')
     parser.add_argument('port', type=int, help='Porta do servidor')
-    parser.add_argument('--output', type=str, help='Arquivo de saída para salvar as respostas')
+    parser.add_argument('response_file', type=str, help='Caminho para o arquivo de resposta')
 
-    args = parser.parse_args()
-
-    private_key_str = """
------BEGIN RSA PRIVATE KEY-----
-MIICWwIBAAKBgQC6WxHzHil173GFXttAF6dEIGXfT5tSBv7l1pgX2hsIC1bVRTy4
-f8eiEWIing0fdXS/X2jsPMH02vFleGU+7Fvmo0fWvSPgeOdLavydF+atLptGHNY9
-wsfTozhDwwgn+dw9vEgfJ9uySvcKWt/TrgX7xXSv82siHc1X63P9D8wdgwIDAQAB
-AoGAOS/8VKajY4ksxZhj4QnBL0Nf78T+rY/vBfoyJ1Orqu7L4VvDc/zmduItwuDM
-tyQ0xQuS57gHb0wG+zQUodgnpRtGa7I8IFwdBTA7dBdPssvSGfLH0XZy/3EWuWwE
-H+TCFtI5WJqFEEGVIO1BRC9lz7uodf/GxmzkcUMUmSU1fsUCQQDvQfVBPJsBFcrx
-boXY0b6gwJGYNjV7zFE7mWJe356qDSyRBrftwpk6ZjM50OIbL7wFBkru1b34Zo/n
-1txHkMLXAkEAx2Vugcr3lrg5ebS7Zy5P6xOjgdjIGbZPM3ybfJdUv6pcpEzUaXXt
-YHYGycKbvvfw7XHrJagORh3mNQRWrEiRNQJAJyShXVTu/xRzqWAtobVe/KnEqCRm
-R6S7vYZwo5juOmABZJC20r09mGJUCydzdoMuvZuz8rMha1xMOt/aFhNG7QJAH2nu
-iApHCXrKq076+12Df8CfUPSrScm8HptyD6Xz1yJq6AOmr1rB5CGUHjNHwEVlsrLw
-3gTlAszxGMcvNINWRQJAdGmgXJDKHziJIkWt5dTcqj7Gnm7y1r0KNxJ66ivENsyl
-qBhJ3TMW4W2Eyq8AWJLoxTZtx+PrR5RQGr+keVh5qg==
------END RSA PRIVATE KEY-----
-"""
-
-    public_key_str = """
------BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6WxHzHil173GFXttAF6dEIGXf
-T5tSBv7l1pgX2hsIC1bVRTy4f8eiEWIing0fdXS/X2jsPMH02vFleGU+7Fvmo0fW
-vSPgeOdLavydF+atLptGHNY9wsfTozhDwwgn+dw9vEgfJ9uySvcKWt/TrgX7xXSv
-82siHc1X63P9D8wdgwIDAQAB
------END PUBLIC KEY-----
-"""
-
-    private_key = serialization.load_pem_private_key(private_key_str.encode(), password=None,
-                                                     backend=default_backend())
-    public_key = serialization.load_pem_public_key(public_key_str.encode(), backend=default_backend())
+    args = parser.parse_args()  # Analisa os argumentos da linha de comando
 
     ip = args.ip
     port = args.port
-    response_file = args.output
+    response_file = args.response_file
 
-    if response_file is None:
-        response_file = "responses.txt"
-
-    scan_udp(ip, port, private_key, public_key, response_file)
+    scan_udp(ip, port, PRIVATE_KEY, PUBLIC_KEY, response_file)
 
 
 if __name__ == '__main__':
